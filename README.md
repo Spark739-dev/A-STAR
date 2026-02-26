@@ -1,6 +1,6 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name: VESHWANTH.    </h3>
+<h3>Register Number: 212224230300       </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
@@ -55,8 +55,77 @@
 <hr>
 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/b1377c3f-011a-4c0f-a843-516842ae056a)
-
-<hr>
+<H3>PROGRAM:</H3>
+        
+        from collections import defaultdict
+        
+        Graph_nodes = defaultdict(list)
+        H_dist = {}
+        
+        edges, heuristics = map(int, input().split())
+        
+        
+        for _ in range(edges):
+            parts = input().split()
+            u, v, w = parts[0], parts[1], parts[2]
+            Graph_nodes[u].append((v, int(w)))
+            Graph_nodes[v].append((u, int(w)))   # undirected
+        
+        for _ in range(heuristics):
+            parts = input().split()
+            node = parts[0]
+            val = parts[-1]
+            H_dist[node] = int(val)
+        
+        
+        def heuristic(n):
+            return H_dist[n]
+        
+        def get_neighbors(v):
+            return Graph_nodes[v]
+        
+        
+        def aStarAlgo(start_node, stop_node):
+            open_set = {start_node}
+            closed_set = set()
+        
+            g = {start_node: 0}
+            parents = {start_node: start_node}
+        
+            while open_set:
+                n = min(open_set, key=lambda x: g[x] + heuristic(x))
+        
+                if n == stop_node:
+                    path = []
+                    while parents[n] != n:
+                        path.append(n)
+                        n = parents[n]
+                    path.append(start_node)
+                    path.reverse()
+                    print("Path found:", path)
+                    return path
+        
+                for (m, weight) in get_neighbors(n):
+                    if m not in open_set and m not in closed_set:
+                        open_set.add(m)
+                        parents[m] = n
+                        g[m] = g[n] + weight
+                    else:
+                        if g[m] > g[n] + weight:
+                            g[m] = g[n] + weight
+                            parents[m] = n
+                            if m in closed_set:
+                                closed_set.remove(m)
+                                open_set.add(m)
+        
+                open_set.remove(n)
+                closed_set.add(n)
+        
+            print("Path does not exist!")
+            return None
+        
+        aStarAlgo('A', 'J')
+ <hr>
 <h2>Sample Input</h2>
 <hr>
 10 14 <br>
